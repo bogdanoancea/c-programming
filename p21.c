@@ -7,7 +7,7 @@ int main() {
 	scanf("%d", &a);
 	printf("Introduceti b: ");
 	scanf("%d", &b);
-	
+	getchar();
 	
 	printf("Introduceti operatia dorita (+ - * /): ");
     scanf("%c", &x);
