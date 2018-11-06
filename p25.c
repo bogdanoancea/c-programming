@@ -5,11 +5,11 @@ int main (void) {
 	int a, b, c;
 	float x1, x2, d;
 	printf("Introduceti coeficientii ecuatiei.\n");
-	printf("\ta="); 
+	printf("a="); 
 	scanf("%d",&a);
-	printf("\tb="); 
+	printf("b="); 
 	scanf("%d",&b);
-	printf("\tc="); 
+	printf("c="); 
 	scanf("%d",&c);
 	
 	if( !a ) //a==0
@@ -20,18 +20,17 @@ int main (void) {
 				printf("Ecuatia nu are nici o solutie.");
 		else {
 			x1 = -c / (float)b;
-			printf("Solutia ecuatiei este: %.2f.", x1);
+			printf("Solutia ecuatiei este: %.2f ", x1);
 		}
 	else {
 		d = b * b - 4 * a * c;
-		printf("%f", sqrt(d));
 		if(d < 0)
 			printf("Ecuatia nu are solutii reale.");
 		else {
 			x1 = ( -b - sqrt(d)) / ( 2 * a );
 			x2 = ( -b + sqrt(d)) / ( 2 * a );
-			printf("Solutiile sunt:\n\tx1= %.2f\n", x1);
-			printf("\tx2=: %.2f\n", x2);
+			printf("Solutiile sunt:\n\tx1=%.2f\n", x1);
+			printf("\tx2=%.2f\n", x2);
 		}
 	}
 	return 0;
