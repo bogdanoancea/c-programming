@@ -1,8 +1,9 @@
 #include<stdio.h>
 
 int main() {
-	int v = 0;
-	int c = 0;
+	int c = 0; // numarul de consoane
+	int v = 0; // nummarul de vocale
+	
 	char k;
  
 	printf("Introduceti textul dorit: ");
@@ -27,7 +28,7 @@ int main() {
 			}
 		k = getchar(); //urmatorul caracter din text 
 	}
-	printf("Numarul de vocale este: %u\n", v);
-	printf("Numarul de consoane este: %u\n", c);
+	printf("\nNumarul de vocale este: %u", v);
+	printf("\nNumarul de consoane este: %u", c);
 	return 0;
 }
