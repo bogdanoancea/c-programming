@@ -4,6 +4,7 @@
 void afisare() {
 	printf("Hello world!");
 }
+
 int main() {
 	afisare();
 	return 0;
