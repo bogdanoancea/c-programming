@@ -2,7 +2,7 @@
 
 int main() {
 	float a, b, c;
-	printf("Dati lungimile laturilor:\n");
+	printf("Dati lungimile laturilor\n");
 	printf("a=");
 	scanf("%f", &a);
 	printf("b=");
