@@ -9,8 +9,7 @@ int main() {
 	do {
 		s += i;   //s=s+i;
 		i++;
-	}
-	while(i <= n);
+	} while(i <= n );
 	printf("Suma primelor %d numere naturale este: %d\n", n, s);
 	return 0;
 }
