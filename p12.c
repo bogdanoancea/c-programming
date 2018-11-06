@@ -15,6 +15,7 @@ int main() {
 	
 	printf("Utilizarea operatorului in forma prefixata %d\n", --val);
 	printf("Utilizarea dupa decrementare %d\n", val);
+	
 	return 0;
 }
 
