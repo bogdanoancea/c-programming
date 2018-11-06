@@ -3,13 +3,10 @@
 
 float produs1(int n) {	//cu instructiunea FOR
 	float p = 1;
-	float z = 1;
 	int i;
 	for(i = 1; i <= n; i++) {
-		if (!(i%2))	//se mai putea scrie if(i%2==0) {
-			z = 1 / (float)i;
-			p = p * z;
-		} 
+		if (!(i%2)) //se mai putea scrie if(i%2==0)
+			p = p * (1 / (float)i);
 		else 
 			p = p * i;	//pt impar
 	}
@@ -18,13 +15,10 @@ float produs1(int n) {	//cu instructiunea FOR
 
 float produs2(int n) { //cu instructiunea WHILE
 	float p = 1;
-	float z = 1;
 	int i = 1; 
 	while(i <= n) {
-		if (! (i % 2) )	//se mai putea scrie if(i%2==0) {
-			z = 1 / (float)i;
-			p = p * z;
-		} 
+		if (! (i % 2) ) //se mai putea scrie if(i%2==0)
+			p = p * (1 / (float)i);
 		else 
 			p = p * i;	//pt impar
 		i++;
@@ -34,18 +28,15 @@ float produs2(int n) { //cu instructiunea WHILE
 
 float produs3(int n) { //cu instructiunea WHILE
 	float p = 1;
-	float z = 1;
 	int i = 1;
 	
 	do {
-		if ( ! ( i % 2 ) )	//se mai putea scrie if(i%2==0) {
-			z = 1 / (float)i;
-			p = p * z;
-		} 
+		if ( ! ( i % 2 ) ) //se mai putea scrie if(i%2==0)
+			p = p * (1 / (float)i);
 		else 
 			p = p * i;	//pt impar
 		i++;
-	} while ( i<= n);
+	} while ( i<= n );
 	return p;
 }
 
