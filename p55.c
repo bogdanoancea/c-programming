@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 int main() {
-	int n,i;
+	int n, i;
 	int *a;
  
 	printf("n = "); 
