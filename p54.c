@@ -20,6 +20,8 @@ int main() {
 		printf("%s se gaseste in: %s pe pozitia %d\n", sir3, sir1, res);
 	else
 		printf("%s nu se gaseste in: %s\n", sir3, sir1);
+	
+	return 0;
 }
 
 int pos( char* s1, char * s2) {
