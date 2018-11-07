@@ -3,12 +3,13 @@
 int main() {
 	int v = 0;
 	int c = 0;
-	printf("Introduceti textul dorit: ");
 	char k;
- 
+	
+	printf("Introduceti textul dorit: ");
+	
 	do {
 		k = getchar();
-		if ( k !=',' && k != ' ' && k != '\n' && k != '.')
+		if ( k != ',' && k !=  ' ' && k != '\n' && k != '.')
 			switch (k) {
 				case 'a':
 				case 'A':
@@ -23,7 +24,7 @@ int main() {
 						break;
 				default: c++;
 			}
-	} while (k !='.' && k != '\n');
+	} while (k != '.' && k != '\n');
  
 	printf("Numarul de vocale este %u\n", v);
 	printf("Numarul de consoane este %u\n", c);
