@@ -3,19 +3,20 @@
 void citire(int a[], int n) {
 	int j;
 	
-	printf("\nIntroduceti elementele sirului:\n");
+	printf("\nIntroduceti elementele vectorului:\n");
 	for(j = 0; j < n; j++) {
-		printf("\t a[%d]=", j);
+		printf("a[%d]=", j);
 		scanf("%d", &a[j]);
 	}
 }
 
 void afisare(int a[], int n) {
 	int i;
-	printf("\nElementele sirului sunt: ");
+	printf("\nElementele vectorului sunt: ");
 	for(i = 0; i < n; i++)
-		printf("%d ", a[i]);
+		printf("%d  ", a[i]);
 	
+	printf("\n");
 }
 
 int main() {
@@ -23,7 +24,7 @@ int main() {
 	printf("Introduceti numarul de elemente (<20):");
 	scanf("%d", &n);
 	
-	citire(a[], n);
-	afisare(a[], n);
+	citire(a, n);
+	afisare(a, n);
 	return 0;
 }
