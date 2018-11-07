@@ -1,15 +1,15 @@
 #include<stdio.h>
 
 int main() {
-	int a[20];	/*am declarat un sir de max 20 de elem. de tipul int cu numele a */
+	int a[20];	/*am declarat un vector de maxim 20 de elememnte de tipul int cu numele a */
  
-	/* introducem numarul de elemente din sir */
+	/* introducem numarul de elemente din vector */
 	int n;
 	int i;
-	printf("Dati nr de elemente din sir (<=20): ");
+	printf("Dati nr de elemente (<=20): ");
 	scanf("%d", &n);
  
-	//introducem elementele din sir
+	//introducem elementele
 	printf("Introduceti elementele vectorului\n");
 	for(i = 0; i < n; i++) {
 		printf("\t a[%d]= ", i + 1);
@@ -17,10 +17,11 @@ int main() {
 	}
  
 	/* afisam elementele vectorului */
-	printf("Elementele sirului sunt: ");
+	printf("Elementele vectorului sunt: ");
 	for(i = 0; i < n; i++)
 		printf("%d \t", a[i]);
 	
+	printf("\n");
 	return 0;
 }
 
