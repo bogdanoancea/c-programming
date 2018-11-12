@@ -41,7 +41,7 @@ int suma_poz(int a[], int n);
 int suma_neg(int a[], int n);
 
 /* functia care cauta un element in vector */
-int cauta(int a[], int n, int el);
+int cautare(int a[], int n, int el);
 
 #define NMAX 20
 
@@ -53,7 +53,7 @@ int main() {
 	n = nr_elem(NMAX);
 	
 	citire(v, n);
-	afisare(v,n);
+	afisare(v, n);
 	
 	printf("\nSuma elementelor este: %d\n", suma(v, n));
 	printf("\nProdusul elementelor este: %d\n", produs(v, n));
@@ -64,11 +64,11 @@ int main() {
 	printf("\nSuma elementelor negative este: %d\n", suma_neg(v, n));
 	printf("\nIntroduceti un numar:");
 	scanf("%d", &nr);
-	pos = cautare(v, n, nr);	
+	pos = cautare(v, n, nr);
 	if(pos == -1)
 		printf("\nNumarul %d nu a fost gasit in vector", nr);
 	else
-		printf("\nNumarul % se afla pe pozitia %d", nr, pos);
+		printf("\nNumarul %d se afla pe pozitia %d", nr, pos);
 	
 	return 0;
 }
@@ -93,7 +93,7 @@ void afisare(int a[], int n) {
 void citire(int a[], int n) {
 	int i;
 	for(i = 0; i < n; i++) {
-		printf("\t a[%d]=", i);
+		printf("a[%d]=", i);
 		scanf("%d", &a[i]);
 	}
 }
@@ -195,5 +195,5 @@ int cautare(int a[], int n, int elem) {
 	for(i = 0; i < n; i++)
 		if( a[i] == elem)
 			return i;
-	return -1;	
+	return -1;
 }

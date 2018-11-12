@@ -1,0 +1,4 @@
+acesta este un text ale carui
+cuvinte trebuiesc numarate
+cu ajutorul unui
+program c
