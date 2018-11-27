@@ -7,9 +7,9 @@ int main() {
 	int x;
 	int y;
  
-	printf("Introduceti x: ",x);
+	printf("Introduceti x: ");
 	scanf("%d", &x); 
-	printf("Introduceti y: ",y);
+	printf("Introduceti y: ");
 	scanf("%d", &y);
  
 	printf("\nInainte de interschimbare: \n");

@@ -38,7 +38,7 @@ int main() {
  
 	/* elberarea memoriei */
 	for (i = 0; i < n; i++) {
-		free(mat[i]);	
+		free(mat[i]);
 	}
 	free(mat);
 

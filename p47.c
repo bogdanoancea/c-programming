@@ -26,6 +26,6 @@ int main() {
 	*p = a;
 	
 	printf("a= %d\t b= %d\t *p= %d \n\n", a, b, *p);
-
+	return 0;
 }
 
