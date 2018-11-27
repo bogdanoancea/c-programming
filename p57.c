@@ -18,7 +18,7 @@ int main () {
 	scanf("%d", &m);
 	
 	A = (int **) malloc( n * sizeof(int *));
-	for(i = 0; i < m; i++)
+	for(i = 0; i < n; i++)
 		A[i] = malloc( m * sizeof(int));
 
 	if(A == NULL) {
@@ -27,7 +27,7 @@ int main () {
 	}
 
 	B = (int **) malloc( n * sizeof(int *));
-	for(i = 0; i < m; i++)
+	for(i = 0; i < n; i++)
 		B[i] = malloc( m * sizeof(int));
 
 	if(B == NULL) {
@@ -76,7 +76,7 @@ int** aduna_matrici(int** mat1, int** mat2, int n, int m) {
 	int i, j;
 
 	result = (int **) malloc( n * sizeof(int *));
-	for(i = 0; i < m; i++)
+	for(i = 0; i < n; i++)
 		result[i] = malloc( m * sizeof(int));
 	
 	for(i = 0; i < n; i++)
