@@ -16,8 +16,8 @@ typedef automobil masini[20];	//tip de date propriu - vector de 20 de automobile
 void citire(masini a, int *n) {	//introducere date. Atentie cum este transmis n - numarul de automobile
 	int i;
 	printf("Dati nr. de automobile (cel mult 20): ");
-	scanf("%d",n);
-	for(i=0; i < *n; i++) {
+	scanf("%d", n);
+	for(i = 0; i < *n; i++) {
 		printf("Introduceti datele despre automobilul %d\n", i + 1);
 		printf("\tMarca: ");
 		scanf("%s", a[i].marca);
@@ -34,7 +34,7 @@ void citire(masini a, int *n) {	//introducere date. Atentie cum este transmis n 
 	}
 }
  
-void afisare(masini a,int n){ //afisare date
+void afisare(masini a, int n){ //afisare date
 	int i;
 	 for (i = 0; i < n; i++) {
 		printf("Automobil [%d]:\n", i + 1);
@@ -48,9 +48,9 @@ void afisare(masini a,int n){ //afisare date
 }
 
 /*afiseaza masinile fabricate intr-un anumit an */
-void an(masini a,int n,int p) {
+void an(masini a, int n, int p) {
 	int i;
-	for(i = 0;i < n; i++) {
+	for(i = 0; i < n; i++) {
 		 if(a[i].an == p) {
 			printf("Automobil [%d]:\n",i + 1);
 			printf("\tMarca:     %s\n", a[i].marca);
@@ -94,9 +94,9 @@ int main() {
 			}
 		}
 	printf("Afisare automobile sortate dupa puterea motorului\n");
-	afisare(a,n);
+	afisare(a, n);
 	printf("\n\tDati anul dupa care vor fi afisate masinile: ");
-	scanf("%d",&p);
-	an(a,n,p);
+	scanf("%d", &p);
+	an(a, n, p);
 	return 0;
 }
