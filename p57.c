@@ -22,7 +22,6 @@ int main () {
 		printf("memorie insuficienta\n");
 		exit(1);
 	}
-	
 	for(i = 0; i < m; i++) {
 		A[i] = malloc( m * sizeof(int));
 		if(A[i] == NULL) {
@@ -90,10 +89,10 @@ int** aduna_matrici(int** mat1, int** mat2, int n, int m) {
 		printf("memorie insuficienta\n");
 		exit(1);
 	}
-	for(i = 0; i < m; i++) {
+	for(i = 0; i < n; i++) {
 		result[i] = malloc( m * sizeof(int));
 		if(result[i] == NULL) {
-			printf("Memorie insuficienta");
+			printf("Memorie insuficienta\n");
 			exit(1);
 		}
 	}
