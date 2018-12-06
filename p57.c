@@ -18,21 +18,31 @@ int main () {
 	scanf("%d", &m);
 	
 	A = (int **) malloc( n * sizeof(int *));
-	for(i = 0; i < m; i++)
-		A[i] = malloc( m * sizeof(int));
-
 	if(A == NULL) {
 		printf("memorie insuficienta\n");
 		exit(1);
 	}
+	
+	for(i = 0; i < m; i++) {
+		A[i] = malloc( m * sizeof(int));
+		if(A[i] == NULL) {
+			printf("memorie insuficienta\n");
+			exit(1);
+		}
+	}
 
 	B = (int **) malloc( n * sizeof(int *));
-	for(i = 0; i < m; i++)
-		B[i] = malloc( m * sizeof(int));
-
 	if(B == NULL) {
 		printf("memorie insuficienta\n");
 		exit(1);
+	}
+
+	for(i = 0; i < m; i++) {
+		B[i] = malloc( m * sizeof(int));
+		if(B[i] == NULL) {
+			printf("memorie insuficienta\n");
+			exit(1);
+		}
 	}
 
 	printf("Introduceti elementele matricei A\n");
@@ -57,7 +67,7 @@ void citeste(int **mat, int n, int m) {
 	for(i = 0; i < n; i++)
 		for(j = 0; j < m; j++) {
 			printf("mat[%d][%d] = ", i, j);
-			scanf("%d", mat[i] + j);
+			scanf("%d", mat[i] + j); // echivalent scanf("%d", &mat[i][j])
 		}
 }
 
@@ -76,9 +86,17 @@ int** aduna_matrici(int** mat1, int** mat2, int n, int m) {
 	int i, j;
 
 	result = (int **) malloc( n * sizeof(int *));
-	for(i = 0; i < m; i++)
+	if(result == NULL) {
+		printf("memorie insuficienta\n");
+		exit(1);
+	}
+	for(i = 0; i < m; i++) {
 		result[i] = malloc( m * sizeof(int));
-	
+		if(result[i] == NULL) {
+			printf("Memorie insuficienta");
+			exit(1);
+		}
+	}
 	for(i = 0; i < n; i++)
 		for( j = 0; j < m; j++)
 			result[i][j] = mat1[i][j] + mat2[i][j];
