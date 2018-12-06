@@ -13,7 +13,7 @@ int main(void){
 	gets(s2);
 	puts("s3:"); 
 	gets(s3);
-	while ( pos = strstr(ps1,s2) ){
+	while ( pos = strstr(ps1, s2) ){
 		while(ps1 < pos) 
 			*r++ = *ps1++; //copiez în r din s1 pana la pos
 		strcpy(r, s3); //copiez în r pe s3
