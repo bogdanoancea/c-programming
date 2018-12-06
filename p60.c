@@ -10,7 +10,7 @@ int main () {
 	puts("Cuvintele introduse sunt:");
 	while ( cuv != NULL ) {
 		puts(cuv); // scrie cuvant
-		cuv = strtok(0, sep); // urmatorul cuvant din linie
+		cuv = strtok(NULL, sep); // urmatorul cuvant din linie
 	}
 	return 0;
 }
