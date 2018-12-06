@@ -8,8 +8,11 @@ int main() {
 	printf("n = "); 
 	scanf("%d", &n); /* Dimensiunea vectorului */
 
-	a = malloc(n * sizeof(int));
-
+	a = (int*) malloc(n * sizeof(int));
+	if (a == NULL) {
+		printf("Memorie insuficienta!");
+		exit(1);
+	}
 	printf("Introduceti componentele vectorului: \n");
 
 	for (i = 0; i < n; i++) {
