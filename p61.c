@@ -14,7 +14,7 @@ void citire_cuv( char tab_cuv[][LUNG], int *nr_cuv ) {
 void cuv_max( char tab_cuv[][LUNG], int nr_cuv ){
 	int i, lung_crt, lung_max = 0;
 	char * p_max;
-	/* pointerul spre cuvantul maxim */
+	/* pointerul spre cuvantul de lungime maxima */
 	/* se poate memora indicele cuvantului de lungime maxima: int i_max;
 	sau chiar cuvantul de lungime maxima: char c_max[LUNG]; */
 	for(i = 0; i < nr_cuv; i++)
@@ -27,7 +27,7 @@ void cuv_max( char tab_cuv[][LUNG], int nr_cuv ){
 	
 void cuv_vocale( char tab_cuv[][LUNG], int nr_cuv ){
 	int i;
-	puts("Cuvintele ce incep cu vocale:");
+	puts("Cuvintele care incep cu vocale:");
 	for(i = 0; i < nr_cuv; i++)
 		switch(toupper(tab_cuv[i][0])){
 			case 'A': 
