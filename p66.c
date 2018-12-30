@@ -71,14 +71,26 @@ int main() {
 	scanf("%d", &n);
 	/* se aloca dinamic memorie */
 	v = (struct angajat *) malloc (n * sizeof( struct angajat));
+	if( v == NULL) {
+		printf("Memorie insuficienta");
+		exit(1);
+	}
 	for(i = 0; i < n; i++) {
 		v[i].nume = (char*)malloc(DIM_MAX * sizeof(char));
+		if(v[i].nume == NULL) {
+			printf("Memorie insuficienta");
+			exit(1);
+		}
 		v[i].prenume = (char*)malloc(DIM_MAX * sizeof(char));
+		if(v[i].prenume == NULL) {
+			printf("Memorie insuficienta");
+			exit(1);
+		}
 	}
 	
 	citeste(v, n);
-	printf("Salariul mediu pe angajat este: %f", sal_mediu(v,n));
-	afiseaza(v,n);
+	printf("Salariul mediu pe angajat este: %f", sal_mediu(v, n));
+	afiseaza(v, n);
 	
 	/* inaintea terminarii programului avem grija sa eliberam memoria alocata dinamic */
 	for(i = 0; i < n; i++) {

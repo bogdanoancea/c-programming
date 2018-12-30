@@ -14,10 +14,17 @@ int main() {
 
 
 	/* Se aloca spatiu pentru matrice */
-	mat = malloc(n * sizeof(int *));
-
+	mat = (int**) malloc(n * sizeof(int *));
+	if(mat == NULL) {
+		printf("memorie insuficienta");
+		exit(1);
+	}
 	for (i = 0; i < n; i++) {
-		mat[i] = calloc(m, sizeof(int));
+		mat[i] = malloc(m * sizeof(int));
+		if(mat[i] == NULL) {
+			printf("Memorie insuficienta");
+			exit(1);
+		}
 	}
 
 	/*Se seteaza valorile elementelor*/

@@ -21,7 +21,7 @@ int strcmp( char *s1, char *s2){
 
 char *strcpy( char *d, char *s){
 	int i = 0;
-	while(s[i]){
+	while(s[i] != 0){
 		d[i] = s[i];
 		i++;
 	}
@@ -31,10 +31,10 @@ char *strcpy( char *d, char *s){
 
 char *strcat(char *d, char *s){
 	int i = 0, j = 0;
-	while(d[i]) 
+	while(d[i] != 0) 
 		i++;
 	/* la iesirea din while, i este indicele caracterului cu rol de terminator de sir*/
-	while(d[i++] = s[j++]);
+	while(d[i++] = s[j++]); // cumm se mai poate scrie?
 	return d;
 }
 
