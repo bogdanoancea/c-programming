@@ -19,7 +19,8 @@ void dec_vigenere(FILE* pf_in, FILE* pf_out, char* key);
 void en_xor(FILE* pf_in, FILE* pf_out, char* key);
 void dec_xor(FILE* pf_in, FILE* pf_out, char* key);
 
-void preprocesare_caesar(char* buf);
+void preprocess_caesar(char* buf);
+int control_sum(char*);
 
 int main(int argc, char* argv[] ) {
     FILE* pf_in;
@@ -146,14 +147,14 @@ void decrytion(FILE* pf_in, FILE* pf_out, char* alg, char* key ) {
             dec_xor(pf_in, pf_out, key);
 }
 
-void preprocesare_caesar(char* buf) {
+void preprocess_caesar(char* buf) {
     int i;
     for (i = 0; i < strlen(buf); i++) {
-        if(buf[i] >= 'A' && buf[i] <= 'Z')
-            buf[i]+=32;
+       if(isupper(buf[i]))
+        buf[i] = tolower(buf[i]);
     }
     for (i = 0; i < strlen(buf); i++) {
-        if(buf[i] < 'a' || buf[i] > 'z')
+        if(!isalpha(buf[i]))
             buf[i] ='q';
     }
 }
@@ -168,12 +169,10 @@ void en_caesar(FILE* pf_in, FILE* pf_out, char* key) {
    
     while( fgets(buf, 1024, pf_in) != NULL ) {
         buf[strcspn(buf, "\r\n")] = 0;
-        preprocesare_caesar(buf);
+        preprocess_caesar(buf);
         for(i = 0; i < strlen(buf); i++) {
             if(isalpha(buf[i])) {
-                buf[i] += key_no;
-                if(buf[i] >= 'z')
-                    buf[i] = buf[i] - 'z' + 'a' - 1;
+                buf[i] = (buf[i] - 'a' + key_no) % 26 + 'a';
             }
         }
         puts(buf);
@@ -182,7 +181,6 @@ void en_caesar(FILE* pf_in, FILE* pf_out, char* key) {
         
     }
 }
-
 
 void dec_caesar(FILE* pf_in, FILE* pf_out, char* key) {
  
@@ -196,7 +194,7 @@ void dec_caesar(FILE* pf_in, FILE* pf_out, char* key) {
         buf[strcspn(buf, "\r\n")] = 0;
         for(i = 0; i < strlen(buf); i++) {
             if(isalpha(buf[i])) {
-                buf[i] -= key_no;
+                buf[i] -=key_no;
                 if(buf[i] < 'a')
                     buf[i] = buf[i] + 'z' - 'a' + 1;
             }
@@ -204,41 +202,110 @@ void dec_caesar(FILE* pf_in, FILE* pf_out, char* key) {
         puts(buf);
         strcat(buf, "\n");
         fputs(buf, pf_out);
-        
     }
 }
 
 
-void dec_vigenere(FILE* pf_in, FILE* pf_out, char* key) {}
-void en_xor(FILE* pf_in, FILE* pf_out, char* key){}
+
+
 void dec_xor(FILE* pf_in, FILE* pf_out, char* key){}
 
 
 void en_vigenere(FILE* pf_in, FILE* pf_out, char* key) {
     
     char buf[1024];
-    int i, j;
+    int i, j, n;
     int keyLength = strlen(key);
     
     while( fgets(buf, 1024, pf_in) != NULL ) {
-        //buf[strcspn(buf, "\r\n")] = 0;
-        for (int i = 0, j = 0, n = strlen(buf); i < n; i++) {   
-            // if alphabetic proceed with ciphering, else return normal character
+        for (i = 0, j = 0, n = strlen(buf); i < n; i++) {   
             if (isalpha(buf[i])) {
+                if(isupper(buf[i]))
+                    buf[i] = tolower(buf[i]);
+                
+                char keyFirstLetter = (isupper(key[j % keyLength])) ? 'A' : 'a';
             
-                // calculate ASCII code for the key position (j), wrap around beginning of keyword when end of keyword is reached
-                char keyReferenceValue = (isupper(key[j % keyLength])) ? 'A' : 'a';
-            
-                // calculate ASCII code of the first letter of alphabet depending on upper- or lowercase
-                char referenceValue = (isupper(buf[i])) ? 'A' : 'a';
-            
-                // calculate cipher letter using formula ci = (pi + kj) % 26, then convert to right ASCII character number
-                buf[i] = ((buf[i] - referenceValue + (key[(j % keyLength)] - keyReferenceValue)) % 26) + referenceValue;
+                // ci = (pi + kj) % 26 
+                buf[i] = ((buf[i] - 'a' + (key[(j % keyLength)] - keyFirstLetter)) % 26) + 'a';
                 j++;
             }
         }    
         puts(buf);
         fputs(buf, pf_out);
-        
     }
+}
+
+void dec_vigenere(FILE* pf_in, FILE* pf_out, char* key) {
+    
+    char buf[1024];
+    int i, j;
+    int keyLength = strlen(key);
+    
+    while( fgets(buf, 1024, pf_in) != NULL ) {
+        for (int i = 0, j = 0, n = strlen(buf); i < n; i++) {   
+            if (isalpha(buf[i])) {
+                if(isupper(buf[i]))
+                    buf[i] = tolower(buf[i]);
+                
+                char keyFirstLetter = (isupper(key[j % keyLength])) ? 'A' : 'a';
+                buf[i] = ((buf[i] - 'a' - (key[(j % keyLength)] - keyFirstLetter)) % 26) + 'a';
+                j++;
+            }
+        }    
+        puts(buf);
+        fputs(buf, pf_out); 
+    }
+}
+
+
+
+int control_sum(char* word) {
+    int s = 0;
+    int i;
+    for(i = 0; i < strlen(word); i++) {
+        s += word[i];
+    }
+    return (s % 256);
+}
+
+void en_xor(FILE* pf_in, FILE* pf_out, char* key){
+    FILE* pf_key;
+    char buf[1024];
+    int i, sc, res;
+    char* word;
+    char* sep = " \t,";
+
+    pf_key = fopen(key, "rb");
+    if(pf_key == NULL) {
+        puts("Nu s-a reusit deschiderea fisierului cheie!");
+        exit(5);
+    }
+
+    while( fgets(buf, 1024, pf_in) != NULL ) {
+        buf[strcspn(buf, "\r\n")] = 0;
+        word = strtok (buf, sep); // primul cuvant din linie
+	    while ( word != NULL ) {
+           
+		    sc = control_sum(word);
+            printf("%d\n", sc);
+            res = fseek(pf_key, SEEK_SET, sc);
+            if(res != 0) {
+                puts("Eroare la pozitionare in fisierului cheie!");
+                exit(6);
+            }
+            char* wkey = (char*) malloc(sizeof(char) * strlen(word));
+            res = fread(wkey, sc, 1, pf_key);
+            if(res != 0) {
+                puts("Eroare la citirea din fisierului cheie!");
+                exit(7);
+            }
+            for (i = 0; i < strlen(word); i++) {
+                word[i] = word[i] ^ wkey[i];
+            }
+            puts(word);
+		    word = strtok(0, sep); // urmatorul cuvant din linie
+	    }
+    }
+
+
 }
