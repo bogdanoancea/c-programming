@@ -10,12 +10,14 @@ char* get_file_out(int l, char* param[]);
 char* get_limba_in(int l, char* param[]);
 char* get_limba_out(int l, char* param[]);
 char* translate(char* word, char** dict, int nl);
-
+char* get_dict_name(char* limba_in, char* limba_out, char* folder);
 char** read_dictionary(FILE* pf_dict, int no_lines);
 void getwords(char *line, char* words[], int index, int no_lines);
 int get_dict_no_lines(FILE* pf_dict);
 char* get_sep();
 int check_sep(char p, char* sep);
+char* autodetect_dict(char* folder_dic);
+
 
 int main(int argc, char* argv[] ) {
     FILE* pf_in;
@@ -47,17 +49,7 @@ int main(int argc, char* argv[] ) {
     limba_out = get_limba_out(argc, argv);
 
 
-    dictionar = (char*) malloc(sizeof(char) * (strlen(limba_in) + strlen(limba_out) + strlen(folder_dic) + 5) );
-    if(dictionar == NULL) {
-        puts("Memorie insuficienta");
-        exit(1);
-    }
-    dictionar[0] = 0;
-    dictionar = strcat(dictionar, folder_dic);
-    dictionar = strcat(dictionar, limba_in);
-    dictionar = strcat(dictionar, "-");
-    dictionar = strcat(dictionar, limba_out);
-    dictionar = strcat(dictionar, ".txt");
+
 
     pf_out = fopen(file_out_name, "wt");
     if(pf_out == NULL) {
@@ -70,6 +62,11 @@ int main(int argc, char* argv[] ) {
         fputs("Fisierul nu exista!", pf_out);
         exit(2);
     }
+
+    if(limba_in != NULL)
+        dictionar = get_dict_name(limba_in, limba_out, folder_dic);
+    else
+        dictionar = autodetect_dict(folder_dic);
 
     pf_dictionar = fopen(dictionar, "rt");
 
@@ -232,4 +229,27 @@ char** read_dictionary(FILE* pf_dict, int no_lines) {
 char* get_sep() {
     char* sep = " \t.;,:";
     return sep;
+}
+
+char* get_dict_name(char* limba_in, char* limba_out, char* folder){
+    char* dictionar = NULL;
+
+    dictionar = (char*) malloc(sizeof(char) * (strlen(limba_in) + strlen(limba_out) + strlen(folder) + 5) );
+    if(dictionar == NULL) {
+        puts("Memorie insuficienta");
+        exit(1);
+    }
+    dictionar[0] = 0;
+    dictionar = strcat(dictionar, folder);
+    dictionar = strcat(dictionar, limba_in);
+    dictionar = strcat(dictionar, "-");
+    dictionar = strcat(dictionar, limba_out);
+    dictionar = strcat(dictionar, ".txt");
+    return dictionar;
+}
+
+char* autodetect_dict(char* folder_dic) {
+    char* res = NULL;
+
+    return res;
 }
