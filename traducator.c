@@ -9,7 +9,13 @@ char* get_file_in(int l, char* param[]);
 char* get_file_out(int l, char* param[]);
 char* get_limba_in(int l, char* param[]);
 char* get_limba_out(int l, char* param[]);
-char* translate(char* word, FILE* pf_dict);
+char* translate(char* word, char** dict, int nl);
+
+char** read_dictionary(FILE* pf_dict, int no_lines);
+void getwords(char *line, char* words[], int index, int no_lines);
+int get_dict_no_lines(FILE* pf_dict);
+char* get_sep();
+int check_sep(char* p, char* sep);
 
 int main(int argc, char* argv[] ) {
     FILE* pf_in;
@@ -22,11 +28,12 @@ int main(int argc, char* argv[] ) {
     char* dictionar;
     char* folder_dic = "translator/dictionare/";
     char buf[MAX_LINE];
-    char* sep = " \t";
+    char* sep = get_sep();
     char* word;
     char* trad;
-
-
+    char** dict;
+    int nl;
+    char eol;
 
     if(argc != 9) {
         puts("Numarul de parametrii este incorect!");
@@ -71,23 +78,35 @@ int main(int argc, char* argv[] ) {
         exit(4);
     }
 
+    nl = get_dict_no_lines(pf_dictionar);
+    dict = read_dictionary(pf_dictionar, nl);
 
     while( fgets(buf, MAX_LINE, pf_in) != NULL ) {
         buf[strcspn(buf, "\r\n")] = 0;
+        if(check_sep(&buf[strlen(buf)-1], get_sep()))
+            eol = buf[strlen(buf)-1];
+        else
+            eol = 0;
+
         word = strtok(buf, sep);
         while(word != NULL) {
-            trad = translate(word, pf_dictionar);
+            trad = translate(word, dict, nl);
             if(trad == NULL) {
                 fputs("<<", pf_out);
                 fputs(word, pf_out);
-                fputs(">> ", pf_out);
+                fputs(">>", pf_out);
             }
             else {
                 fputs(trad, pf_out);
-                fputs(" ", pf_out);
             }
             word = strtok(0, sep);
+            if(word)
+                fputs(" ", pf_out);
         }
+        if(eol) {
+           fputc(eol, pf_out);
+        }
+        fputs("\n", pf_out);
     }
     fclose(pf_in);
     fclose(pf_out);
@@ -135,18 +154,82 @@ char* get_limba_out(int l, char* param[]) {
 }
 
 
-char* translate(char* word, FILE* pf_dict) {
-    char buf2[MAX_LINE];
+char* translate(char* word, char** dict, int nl) {
+    int i;
 
-    rewind(pf_dict);
-    while( fgets(buf2, MAX_LINE, pf_dict) != NULL ) {
-        buf2[strcspn(buf2, "\r\n")] = 0;
-        if(strncmp(word, buf2, strlen(word)) == 0) {
-           char* result = malloc( sizeof(char) * (strlen(buf2) - 1 - strlen(word) ));
-           return strcpy(result, &buf2[strlen(word)+1]);
+    for( i = 0; i < nl; i++) {
+        if(strcmp(word, dict[i]) == 0) {
+            return dict[i + nl];
         }
     }
     return NULL;
 }
 
 
+void getwords(char *line, char* words[], int index, int no_lines) {
+    char *p;
+    char* sep = get_sep();
+
+    p = (char*) malloc( sizeof(char) * strlen(line));
+    strcpy(p, line);
+
+    while(check_sep(p, sep) && *p != 0)
+        p++;
+
+    words[index] = p;
+
+    while(!check_sep(p, sep))
+        p++;
+    *p = 0;
+
+    p++;
+    while(check_sep(p, sep))
+        p++;
+
+    words[index + no_lines] = p;
+    while(!check_sep(p, sep) && *p != 0)
+        p++;
+    *p = 0;
+}
+
+int check_sep(char* p, char* sep) {
+    int res = 0;
+    int i;
+    for( i = 0; i < strlen(sep); i++)
+        if(*p == sep[i])
+            res = 1;
+    return res;
+}
+
+int get_dict_no_lines(FILE* pf_dict) {
+    int res = 0;
+    char buf2[MAX_LINE];
+
+    rewind(pf_dict);
+    while( fgets(buf2, MAX_LINE, pf_dict) != NULL ) {
+            res++;
+    }
+    return res;
+}
+
+char** read_dictionary(FILE* pf_dict, int no_lines) {
+    char** words;
+    int index = 0;
+    char buf2[MAX_LINE];
+
+    words = (char**) malloc (sizeof(char*) * 2 * no_lines );
+
+    rewind(pf_dict);
+
+    while( fgets(buf2, MAX_LINE, pf_dict) != NULL ) {
+        buf2[strcspn(buf2, "\r\n")] = 0;
+        getwords(buf2, words, index, no_lines);
+        index++;
+    }
+    return words;
+}
+
+char* get_sep() {
+    char* sep = " \t.;,:";
+    return sep;
+}
