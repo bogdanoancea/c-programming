@@ -15,7 +15,7 @@ char** read_dictionary(FILE* pf_dict, int no_lines);
 void getwords(char *line, char* words[], int index, int no_lines);
 int get_dict_no_lines(FILE* pf_dict);
 char* get_sep();
-int check_sep(char* p, char* sep);
+int check_sep(char p, char* sep);
 
 int main(int argc, char* argv[] ) {
     FILE* pf_in;
@@ -83,7 +83,7 @@ int main(int argc, char* argv[] ) {
 
     while( fgets(buf, MAX_LINE, pf_in) != NULL ) {
         buf[strcspn(buf, "\r\n")] = 0;
-        if(check_sep(&buf[strlen(buf)-1], get_sep()))
+        if(check_sep(buf[strlen(buf)-1], get_sep()))
             eol = buf[strlen(buf)-1];
         else
             eol = 0;
@@ -173,30 +173,30 @@ void getwords(char *line, char* words[], int index, int no_lines) {
     p = (char*) malloc( sizeof(char) * strlen(line));
     strcpy(p, line);
 
-    while(check_sep(p, sep) && *p != 0)
+    while(check_sep(*p, sep) && *p != 0)
         p++;
 
     words[index] = p;
 
-    while(!check_sep(p, sep))
+    while(!check_sep(*p, sep))
         p++;
     *p = 0;
 
     p++;
-    while(check_sep(p, sep))
+    while(check_sep(*p, sep))
         p++;
 
     words[index + no_lines] = p;
-    while(!check_sep(p, sep) && *p != 0)
+    while(!check_sep(*p, sep) && *p != 0)
         p++;
     *p = 0;
 }
 
-int check_sep(char* p, char* sep) {
+int check_sep(char p, char* sep) {
     int res = 0;
     int i;
     for( i = 0; i < strlen(sep); i++)
-        if(*p == sep[i])
+        if(p == sep[i])
             res = 1;
     return res;
 }
