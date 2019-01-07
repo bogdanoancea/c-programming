@@ -59,20 +59,20 @@ int main(int argc, char* argv[] ) {
     dictionar = strcat(dictionar, limba_out);
     dictionar = strcat(dictionar, ".txt");
 
-    pf_in = fopen(file_in_name, "rt");
-    if(pf_in == NULL) {
-        puts("Nu s-a reusit deschiderea fisierului de intrare!");
-        exit(2);
-    }
-
     pf_out = fopen(file_out_name, "wt");
     if(pf_out == NULL) {
         puts("Nu s-a reusit deschiderea fisierului de iesire!");
         exit(3);
     }
 
+    pf_in = fopen(file_in_name, "rt");
+    if(pf_in == NULL) {
+        fputs("Fisierul nu exista!", pf_out);
+        exit(2);
+    }
+
     pf_dictionar = fopen(dictionar, "rt");
-    puts(dictionar);
+
     if(pf_dictionar == NULL) {
         puts("Nu s-a reusit deschiderea fisierului dictionar!");
         exit(4);
