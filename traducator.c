@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
 
+#define DEBUG 1
 
 #define MAX_LINE 1024
 
@@ -16,8 +18,41 @@ void getwords(char *line, char* words[], int index, int no_lines);
 int get_dict_no_lines(FILE* pf_dict);
 char* get_sep();
 int check_sep(char p, char* sep);
-char* autodetect_dict(char* folder_dic);
+char* autodetect_dict(char* folder_dic, FILE* pf_in, FILE* pf_out);
+char** get_dictionaries(char* folder_dic, int* no_dict);
+int is_text_dict1(char* text, char** dictionar, int no_dic_lines);
+int is_text_dict2(char* text, char** dictionar, int no_dic_lines);
+char** read_input_text(FILE* pf_in, int* no_in_words);
+char* replace_char(char* str, char find, char replace);
 
+
+
+#ifdef DEBUG
+int main(int argc, char* argv[]) {
+    char* folder_dic = "translator/dictionare/";
+    char* limba;
+    char* file_in_name = get_file_in(argc, argv);
+    char* file_out_name = get_file_out(argc, argv);
+    char* limba_out = get_limba_out(argc, argv);
+    FILE *pf_in, *pf_out;
+
+    pf_out = fopen(file_out_name, "wt");
+    if(pf_out == NULL) {
+        puts("Nu s-a reusit deschiderea fisierului de iesire!");
+        exit(3);
+    }
+
+    pf_in = fopen(file_in_name, "rt");
+    if(pf_in == NULL) {
+        fputs("Fisierul nu exista!", pf_out);
+        exit(2);
+    }
+
+    limba = autodetect_dict(folder_dic, pf_in, pf_out);
+    puts(limba);
+    return 0;
+}
+#else
 
 int main(int argc, char* argv[] ) {
     FILE* pf_in;
@@ -25,9 +60,7 @@ int main(int argc, char* argv[] ) {
     FILE* pf_dictionar;
     char* limba_in;
     char* limba_out;
-    char* file_in_name;
-    char* file_out_name;
-    char* dictionar;
+c    char* dictionar;
     char* folder_dic = "translator/dictionare/";
     char buf[MAX_LINE];
     char* sep = get_sep();
@@ -110,7 +143,7 @@ int main(int argc, char* argv[] ) {
     fclose(pf_dictionar);
     return 0;
 }
-
+#endif // DEBUG
 
 char* get_file_in(int l, char* param[]) {
     int i;
@@ -248,8 +281,151 @@ char* get_dict_name(char* limba_in, char* limba_out, char* folder){
     return dictionar;
 }
 
-char* autodetect_dict(char* folder_dic) {
+char* autodetect_dict(char* folder_dic, FILE* pf_in, FILE* pf_out) {
     char* res = NULL;
+    char** dictionaries;
+    char** dictionar = NULL;
+    char** text;
+    int no_in_words = 0;
+    int no_dict = 0;
+    int i,j;
+    FILE* pf_dict;
+    int no_dic_lines;
+    int n1, n2;
+    char* dictionar_name;
 
+    dictionaries = get_dictionaries(folder_dic, &no_dict);
+    for(i = 0; i < no_dict; i++) {
+        puts(dictionaries[i]);
+        n1 = n2 = 0;
+        dictionar_name = NULL;
+        dictionar_name = (char*) malloc(sizeof(char) * (strlen(folder_dic) + strlen(dictionaries[i])));
+        if(dictionar_name == NULL) {
+            puts("Memorie insuficienta");
+            exit(1);
+        }
+        dictionar_name[0] = 0;
+        dictionar_name = strcat(dictionar_name, folder_dic);
+        dictionar_name = strcat(dictionar_name, dictionaries[i]);
+
+        pf_dict = fopen(dictionar_name, "rt");
+        if(pf_dict == NULL) {
+            puts("Nu s-a reusit deschiderea fisierului dictionar!");
+            exit(4);
+        }
+        no_dic_lines = get_dict_no_lines(pf_dict);
+        dictionar = read_dictionary(pf_dict, no_dic_lines);
+        //read input file
+        text = read_input_text(pf_in, &no_in_words);
+        //check if input text is in dict
+        for(j = 0; j < no_in_words; j++) {
+            if(is_text_dict1(text[j], dictionar, no_dic_lines)) {
+                n1++;
+            }
+            if(is_text_dict2(text[j], dictionar, no_dic_lines)) {
+                n2++;
+            }
+
+        }
+        if(n1/no_in_words>=0.7) {
+            replace_char(dictionaries[i], '-', 0);
+            res = dictionaries[i];
+            //am gasit limba 1 res = limba 1
+        }
+        else if (n2/no_in_words >=0.7) {
+            // am gasit limba 2 res = limba2
+            char *minus_pos = strchr(dictionaries[i],'-');
+            replace_char(dictionaries[i], '.', 0);
+            res = minus_pos;
+        }
+        else
+            fputs("Limba necunoscuta", pf_out);
+
+    }
     return res;
 }
+
+char* replace_char(char* str, char find, char replace){
+    char *current_pos = strchr(str,find);
+    while (current_pos){
+        *current_pos = replace;
+        current_pos = strchr(current_pos,find);
+    }
+    return str;
+}
+
+int is_text_dict1(char* text, char* dictionar[], int no_dic_lines) {
+    int res = 0;
+    int i;
+    for(i = 0;  i < no_dic_lines; i++) {
+        if(strcmp(text, dictionar[i]) == 0) {
+            res = 1;
+            break;
+        }
+    }
+    return res;
+}
+
+
+int is_text_dict2(char* text, char* dictionar[], int no_dic_lines) {
+    int res = 0;
+    int i;
+    for(i = 0;  i < no_dic_lines; i++) {
+        if(strcmp(text, dictionar[i+no_dic_lines]) == 0) {
+            res = 1;
+            break;
+        }
+    }
+    return res;
+}
+
+char** get_dictionaries(char* folder_dic, int* no_dict) {
+    char** dictionaries = NULL;
+    DIR *dir;
+    struct dirent *ent;
+
+    if ((dir = opendir (folder_dic)) != NULL) {
+  /* print all the files and directories within directory */
+        while ((ent = readdir (dir)) != NULL) {
+
+            if(strcmp(ent->d_name, ".") !=0 && strcmp(ent->d_name, "..")!=0) {
+                //puts(ent->d_name);
+                if (dictionaries == NULL)
+                    dictionaries = (char**) malloc (sizeof(char*));
+                else
+                    dictionaries = (char**)realloc(dictionaries, *no_dict + 1);
+
+                dictionaries[*no_dict] = (char*) malloc(sizeof(char) * strlen(ent->d_name));
+                strcpy(dictionaries[*no_dict] , ent->d_name);
+                (*no_dict)++;
+            }
+        }
+        closedir (dir);
+    }
+    return dictionaries;
+}
+
+char** read_input_text(FILE* pf_in, int* no_in_words) {
+    char buf[MAX_LINE];
+    char* sep = get_sep();
+    char** text = NULL;
+    char* word;
+
+    while( fgets(buf, MAX_LINE, pf_in) != NULL ) {
+        buf[strcspn(buf, "\r\n")] = 0;
+        word = strtok(buf, sep);
+        while(word != NULL) {
+            if(text == NULL)
+                text = (char**) malloc(sizeof(char*));
+            else
+                text = (char**) realloc(text, *no_in_words + 1);
+            (*no_in_words)++;
+            text[*no_in_words] = (char*) malloc(sizeof(char)*strlen(word));
+            strcpy(text[*no_in_words], word);
+            word = strtok(0, sep);
+        }
+    }
+    return text;
+}
+
+
