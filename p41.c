@@ -46,7 +46,7 @@ int cautare(int a[], int n, int el);
 #define NMAX 20
 
 int main() {
-	int v[20];
+	int v[NMAX];
 	int n;
 	int pos;
 	int nr;
