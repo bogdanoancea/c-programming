@@ -50,6 +50,7 @@ int main() {
 	int n;
 	int pos;
 	int nr;
+    
 	n = nr_elem(NMAX);
 	
 	citire(v, n);
@@ -62,6 +63,10 @@ int main() {
 	printf("\nElementul maxim este: %d\n", max(v, n));
 	printf("\nSuma elementelor pozitive este: %d\n", suma_poz(v, n));
 	printf("\nSuma elementelor negative este: %d\n", suma_neg(v, n));
+    printf("\Numarul elementelor pozitive este: %d\n", nr_poz(v, n));
+    printf("\Numarul elementelor negative este: %d\n", nr_neg(v, n));
+    printf("\Numarul elementelor egale cu zero este: %d\n", nr_zero(v, n));
+    
 	printf("\nIntroduceti un numar:");
 	scanf("%d", &nr);
 	pos = cautare(v, n, nr);
